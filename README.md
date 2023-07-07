@@ -11,9 +11,9 @@
 
 
 ## Members
-* 이정진
-* 김기범
-* 정혜원
+* [이정진](https://github.com/jjlee6496)
+* [김기범](https://github.com/chroion)
+* [정혜원](https://github.com/heawonjeong)
 
 
 

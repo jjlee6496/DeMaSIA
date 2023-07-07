@@ -67,7 +67,7 @@ Task|	목표기간|	세부내용
 
 
 ## 2. 데이터셋 EDA
-
+### 2-1 통계량 분석
 Visdrone 데이터셋을 선정하여 학습을 진행합니다. 그 중에서 MOT를 위하여 Task 4: Multi-Object Tracking 데이터셋을 활용한 학습을 실시합니다.  그리고 해당 데이터셋에 대하여 아래와 같이 분석을 실시하였습니다.
 
 ①	 Visdrone Dataset
@@ -77,6 +77,7 @@ Visdrone 데이터셋을 선정하여 학습을 진행합니다. 그 중에서 M
 ②	 데이터의 구성
 데이터는 이미지(sequence)와 annotation으로 구성되어 있습니다. 
 이미지는 드론에서 촬영한 사람과 차량들의 영상을 프레임별로 나눠 이미지화한 것이고, 어노테이션은 각 이미지에 있는 객체들의 정보를 나타냅니다. annotation에 있는 객체들의 정보는 frame_index, target_id, bbox_left, bbox_top, bbox_width, bbox_height, score, object_category, truncation, occlusion이 있다. 그리고 이 중에서 object category는 각 객체들이 무엇인지를 나타냅니다.
+
   
   
   **Annotation 구조**  
@@ -126,6 +127,11 @@ Visdrone 데이터셋을 선정하여 학습을 진행합니다. 그 중에서 M
 
 
 car, pedistrian이 많은 수를 차지하고 있습니다. 
+
+### Bounding Box 시각화
+
+![image](https://github.com/jjlee6496/DeMaSIA/assets/126838460/6d34712f-1978-4813-b561-366c342c6dd8)
+
 
 
 ## 3. Baseline Model 

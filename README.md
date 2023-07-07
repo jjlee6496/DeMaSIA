@@ -159,7 +159,7 @@ car, pedistrian이 많은 수를 차지하고 있습니다.
    Fast Motion Problem은 객체의 고속 이동으로 인해 detection이 어려워지는 문제입니다. Kalman Filter를 사용하여 이러한 문제에 대응합니다. Kalman Filter는 Object의 위치 및 속도의 예측값과 실제 센서값(혹은 딥러닝을 통해 알아낸 값)을 결합하여 보다 정확한 Detection을 수행 할 수 있습니다. 
 
 
-### 1-3 base line 모델의 구조
+### 3-2 base line 모델의 구조
 
 
 ![image](https://github.com/jjlee6496/DeMaSIA/assets/126838460/63b3806f-f34d-4b31-ba5e-8531f983dd18)

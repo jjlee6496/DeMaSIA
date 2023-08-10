@@ -2,25 +2,83 @@
 
 
 
-# 아이펠 온라인 3기 기업 프로젝트
+# Project : 드론 영상 기반 다중 객체 추적
 
 
 
+## 배경
 
-기업 SIA 에서는 위성/항공영상 분석 인공지능 모델 설계, 구축, 공급 및 지구관측 분석 솔루션 및 플랫폼을 제공합니다. Drone 기술의 발전에 따라 Drone 영상 정보를 이용한 관련시장의 성장과 산업이 확대되고 있으며, 연속되는 이미지로부터 관찰되는 Object의 위치를 찾고 추적하는 방법으로 연구가 다중객체 추적 연구가 진행되고 있습니다. 본 프로젝트에서는 기업 SIA와 연계하여 Airial view로 촬영된 드론영상 데이터(VisDrone)를 기반으로 Multiple Object Tracking(MOT)를 진행합니다. 
-
-
-## Members
-* [이정진](https://github.com/jjlee6496)
-* [김기범](https://github.com/chroion)
-* [정혜원](https://github.com/heawonjeong)
+- 이 프로젝트는 교육기관 AIFFEL과 기업 SI Analytics의 기업 연계 프로젝트로 
+Drone영상(항공영상) 기반 다중 객체 추적을 목표로합니다. 
+드론으로 촬영한 비디오와 고해상도 이미지들로 이루어져 있는 Visdrone 데이터셋에서 
+차량과 사람의 위치를 식별하고 객체를 추적하는 것을 목표로 합니다.
 
 
+## 프로젝트 기간
+
+- 23.07.27 ~ 23.08.11
 
 
-## Schedule / Milestone
-* 매일 오전 미팅 11 : 00, 오후 미팅 16 : 00
-* 기업 SIA 미팅 매주 금요일 15:00
+## Tools
+
+### MMTracking
+- Torch 1.13.0+cu116
+- python 3.9.17
+- cuda_11.5.r11.5
+- miniconda conda 23.3.1
+- mmcls                         0.25.0
+- mmcv-full                     1.7.1
+- mmdet                         2.28.2
+- mmtrack                       0.14.0
+
+### MMDetection
+- Torch 1.10.0+cu111
+- python 3.9.17
+- cuda_11.5.r11.5
+- miniconda conda 23.3.1
+- mmengine                         0.8.2
+- mmcv                     2.0.1
+- mmdet                         3.1.0
+- mmpretain                       1.0.0
+
+
+
+## Datasets
+- [VIsDrone](https://github.com/VisDrone/VisDrone-Dataset)
+
+## Colleagues
+- Team Leader : [이정진](https://github.com/jjlee6496)
+    - 프로젝트 방향 설계
+    - 데이터셋 분석 및 정제
+    - 환경 설정
+    - 모델 검토 및 분석
+    - 모델 실험 및 시각화
+- Team Member : [정혜원](https://github.com/heawonjeong)
+    - 모델 검토 및 분석
+    - 모델 실험
+    - 자료 정리
+- Team Member : [주상현](https://github.com/SangHyun014)
+    - 모델 검토 및 분석
+    - 모델 실험 및 시각화
+
+## Process
+
+( 정진님 그림 첨부 )
+
+1.  **기존 VisDrone → COCO Format 후 데이터 분석 진행**
+    
+    ( 최종 형태의 데이터 구조? 필요 ann, label 그리고 json 변환 파일 )
+    
+2. **MOT 방식 선정 → Detector, Tracker 선정**
+( 선정한 모델 구조 정도 첨부 원리 or MOT에서 유리한 장점 )
+- YOLOX
+  
+  ![image]()
+4. **실험 설계 및 실험 진행 → Data Augmentaiton, Truncation 기준으로 실험을 진행
+( 기본적인 실험을 기준으로 예상 결과 정리 + 지표 정리 )**
+5. **예상 결과와 비교 및 분석 진행** 
+( 정성적 평가 자료 첨부 )
+
 
 Task|	목표기간|	세부내용
 ---|---|---|

@@ -72,7 +72,20 @@ Drone영상(항공영상) 기반 다중 객체 추적을 목표로합니다.
 2. **MOT 방식 선정 → Detector, Tracker 선정**
 ( 선정한 모델 구조 정도 첨부 원리 or MOT에서 유리한 장점 )
 - YOLOX
-  
+
+
+  YOLOX는 Dynamic Convolution과 PANet 등의 최신 기술을 도입하여 객체 감지에 유리한 특성을 가지고 있습니다. 또한 모델의 변형과 확장이 용이하며, 최적화된 네트워크 구조와 알고리즘을 사용하여 학습과 추론 속도를 가지므로 빠른 훈련과 실시간 객체 감지에 적합합니다.   
+
+	YOLOX의 핵심은 다음 구조로 설명할 수 있습니다.
+
+1. backbone과 neck은 기존의 yolov3와 동일합니다.
+2. head가 분리되어 Classification에는 FC Head, Localization에서는 Convolution Head를 적용하여 성능 향상을 이루었습니다.
+이를 통해 Convergence 속도와 AP가 향상되었습니다.
+
+  ![image](https://github.com/jjlee6496/DeMaSIA/assets/126838460/b6a5a3d0-ba13-482e-820e-331307194cb5)
+
+
+* RetinaNet
   ![image]()
 4. **실험 설계 및 실험 진행 → Data Augmentaiton, Truncation 기준으로 실험을 진행
 ( 기본적인 실험을 기준으로 예상 결과 정리 + 지표 정리 )**

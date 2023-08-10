@@ -161,6 +161,31 @@ Drone영상(항공영상) 기반 다중 객체 추적을 목표로합니다.
 
 
 
+## Source Code
+
+
+- [deta coco 변환 코드]
+- [데이터 eda 코드]
+- [Yolox]
+- [Retina]
+- [bytetrack]
+- [시각 자료 생성 코드]
+- [gif]
+
+
+
+## 회고
+
+
+
+### Development
+
+
+- Data
+- EDA
+- Model
+- exp
+
 
 
 

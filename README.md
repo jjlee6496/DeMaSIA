@@ -109,19 +109,52 @@ Visdrone  데이터는 vision 기반 UAV(Unmanned Aerial Vehicle)로 촬영한 �
 * 비디오 개수 : 17
 * 이미지 개수 : 6635
 
-  
+  ![image](https://github.com/jjlee6496/DeMaSIA/assets/126838460/0c6e8341-1eec-4986-b9cc-1990d37f92d6)
+
+* Class 선정
+
+프로젝트 초기에는 pedestrian(pedestrian, people), vehicle(car, van, bus, truck) 두가지 클래스로 합쳐서 진행하였습니다. 그러나 자전거, motor 종류는 주로 사람과 함께 나타나는데 멀어지면 하나의 클래스로 바뀌어 버리는 현상이 발생하였습니다. 
+
+
+people은 MOT17에서 제외하였고, 최종적으로  motion을 추적하는데 있어 좋은 class들인 pedestrian, car, van, bus, truck 5가지를  선정하였습니다.
+
+- 드론의 움직임이 커서 한 프레임 내에 객체가 하나도 없는 경우도 있었습니다. 드론의 극적인 rotation으로 인한 시점 변화에 따른 해결책 필요하다고 판단하여  Augmentation에 대한 실험을 진행하였습니다.
+- truncation이 1인 데이터를 제외하면 화면 경계에 있는 객체는 덜 보게되어 드론 시점의 중앙에 더욱 집중하고, tracklet을 더 빨리 종료시켜 tracking의 품질이 올라갈 것으로 예상하였습니다. 따라서 truncation의 유무에 따른 실험을 진행하였습니다.
+- 그래서 모델당 truncation 유무 2개 * augmentation 4개(no aug, mixup, mosaic, mixup mosaic) 총 8개의 실험을 진행하였습니다.
 
     
 ### 2. 모델 선정  
 
-**MOT 방식 선정 → Detector, Tracker 선정**
-( 선정한 모델 구조 정도 첨부 원리 or MOT에서 유리한 장점 )
+**MOT 방식 선정**
+- TBD(Tracking By Detection)
 
-**Detector**
+먼저 객체 감지 모델(Detection model)을 사용하여 각 프레임 이미지에서의 객체를 먼저 detect 한 후 이 정보를 바탕으로 tracking을 진행하는 방식입니다.
+
+TBD는 다른 tracking 방식보다 Detection 정보를 기반하므로, 객체 검출에 있어서의 정확도가 더 높습니다. 따라서 TBD 방식을 사용했을 때 더 높은 정확도를 보장합니다.
+
+1) Object Detection
+
+2) Data Association
+
+3) Tracklet Generation & Update
+
+그리고 저희 프로젝트에서는 car, pedestrian, van, truck, bus 총 5개의 class에 대한 검출을 시행합니다. 이렇게 여러가지 클래스를 감지할 때 TBD 방식이 더 효과적으로 작동합니다. 
+
+또한 TBD 방식을  사용하며 이제까지 개발된 다양한 Detector 모델과 Tracker 모델을 유연하게 결합하여 사용할 수 있습니다. 
+
+마지막으로 TBD는 빠른 프레임 속도로 객체를 추적하는데 효과적이므로, 실시간 객체 추적에 용이합니다. 
+
+- Detector 선택
+
+detector는 1-stage model과 2-stage model로 나눌 수 있습니다. 2-stage detector는 region proposal과 classification이 순차적으로 이루어집니다. 즉, Localization과 Classification 이 순차적으로 이루어집니다. 이와 다르게 1-stage 모델은 위 두 과정이 동시에 이루어집니다. 2-stage model은 더 높은 정확도를 보이지만, 1-stage model보다 더 시간이 오래 걸립니다. 저희는 좀 더 나은  FPS 성능을 얻어내기 위해 1-stage detector를 선정하였습니다. 
+
+1. RetinaNet
+
+데이터의 각 프레임 내에 Object 가 있는 영역인지 아닌지에 따라(IoU Threshold) positive/negative sample로 구분합니다. 일반적으로 이미지 내의 어려운 양성 샘플(객체영역)보다 쉬운(배경영역)이 압도적으로 많으므로 class imbalance 문제가 발생합니다. Retinanet에서는 새로운  loss function인 focal loss 를 제시하여 class imbalance 문제를 해결하여 모델의 정확도를 높입니다.
 
 
 
-- YOLOX
+2. YOLOX
 
 
   YOLOX는 Dynamic Convolution과 PANet 등의 최신 기술을 도입하여 객체 감지에 유리한 특성을 가지고 있습니다. 또한 모델의 변형과 확장이 용이하며, 최적화된 네트워크 구조와 알고리즘을 사용하여 학습과 추론 속도를 가지므로 빠른 훈련과 실시간 객체 감지에 적합합니다.   
@@ -153,9 +186,24 @@ Visdrone  데이터는 vision 기반 UAV(Unmanned Aerial Vehicle)로 촬영한 �
 
    bytetrack은 detection score가 높은 bounding box 뿐만 아니라 거의 모든 detection box를 associate 하여 tracking하므로 다른 물체에 가려진 객체도 효과적으로 tracking 할 수 있습니다.
 
-  
-4. **실험 설계 및 실험 진행 → Data Augmentaiton, Truncation 기준으로 실험을 진행
-( 기본적인 실험을 기준으로 예상 결과 정리 + 지표 정리 )**
+**실험 설계 및 실험 진행**
+
+ Data Augmentaiton, Truncation 기준으로 실험을 진행
+
+ 1. Augmentation
+
+
+- MixUp
+
+MixUp의 아이디어는 두 개의 다른 이미지를 섞어서 새로운 이미지 데이터를 생성하고, 이를 훈련 데이터로 사용하는 것입니다. 간단하게 말하면, 이미지 데이터의 픽셀 값을 선형적으로 결합하여 새로운 이미지를 생성하고, 그에 해당하는 라벨을 선형적으로 결합하여 새로운 라벨을 생성하는 것입니다.
+
+두개의 기존 이미지의 가중 선형 보간을 통해 새로운 이미지를 생성. 손상된 레이블의 암기를 줄이고, 네트워크에 훈련을 안정화합니다.
+
+- Mosaic
+
+서로 다른 4개의 이미지를 crop하여 하나로 결합하여 새로운 이미지 데이터를 생성하여 훈련데이터로 사용합니다. 일상적인 맥락 밖의 물체 감지를 향상시킵니다. (cutmix는 이미지 2개 사용)
+    
+
 
 6. **예상 결과와 비교 및 분석 진행** 
 ( 정성적 평가 자료 첨부 )

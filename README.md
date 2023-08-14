@@ -125,16 +125,14 @@ Visdrone  데이터는 vision 기반 UAV(Unmanned Aerial Vehicle)로 촬영한 �
 
   ![image](https://github.com/jjlee6496/DeMaSIA/assets/126838460/0c6e8341-1eec-4986-b9cc-1990d37f92d6)
 
+- [ ] category 종류 및 설명
+
 * Class 선정
 
 프로젝트 초기에는 pedestrian(pedestrian, people), vehicle(car, van, bus, truck) 두가지 클래스로 합쳐서 진행하였습니다. 그러나 자전거, motor 종류는 주로 사람과 함께 나타나는데 멀어지면 하나의 클래스로 바뀌어 버리는 현상이 발생하였습니다. 
 
+people은 MOT17에서도 static person을 제외한 것과 같이 제외시킨 후, 최종적으로  motion을 추적하는데 있어 좋은 class들인 pedestrian, car, van, bus, truck 5가지를  선정하였습니다.
 
-people은 MOT17에서 제외하였고, 최종적으로  motion을 추적하는데 있어 좋은 class들인 pedestrian, car, van, bus, truck 5가지를  선정하였습니다.
-
-- 드론의 움직임이 커서 한 프레임 내에 객체가 하나도 없는 경우도 있었습니다. 드론의 극적인 rotation으로 인한 시점 변화에 따른 해결책 필요하다고 판단하여  Augmentation에 대한 실험을 진행하였습니다.
-- truncation이 1인 데이터를 제외하면 화면 경계에 있는 객체는 덜 보게되어 드론 시점의 중앙에 더욱 집중하고, tracklet을 더 빨리 종료시켜 tracking의 품질이 올라갈 것으로 예상하였습니다. 따라서 truncation의 유무에 따른 실험을 진행하였습니다.
-- 그래서 모델당 truncation 유무 2개 * augmentation 4개(no aug, mixup, mosaic, mixup mosaic) 총 8개의 실험을 진행하였습니다.
 
     
 ### 2. 모델 선정  
@@ -205,68 +203,86 @@ detector는 1-stage model과 2-stage model로 나눌 수 있습니다. 2-stage d
 
 **실험 설계 및 실험 진행**
 
- Data Augmentaiton, Truncation 기준으로 실험을 진행
+ Data Augmentation, Annotation 기준으로 성능에 영향을 끼치는 정도를 보고자 함.
 
  1. Augmentation
 
 
 - MixUp
-
+- [ ] (VisDrone에서 적용된)이미지 첨부 예정  
 MixUp의 아이디어는 두 개의 다른 이미지를 섞어서 새로운 이미지 데이터를 생성하고, 이를 훈련 데이터로 사용하는 것입니다. 간단하게 말하면, 이미지 데이터의 픽셀 값을 선형적으로 결합하여 새로운 이미지를 생성하고, 그에 해당하는 라벨을 선형적으로 결합하여 새로운 라벨을 생성하는 것입니다.
 
 두개의 기존 이미지의 가중 선형 보간을 통해 새로운 이미지를 생성. 손상된 레이블의 암기를 줄이고, 네트워크에 훈련을 안정화합니다.
 
 - Mosaic
+- [ ] (VisDrone에서 적용된)이미지 첨부 예정   
+서로 다른 4개의 이미지를 crop하여 하나로 결합하여 새로운 이미지 데이터를 생성하여 훈련데이터로 사용합니다. 일상적인 맥락 밖의 물체 감지를 향상시킵니다.
 
-서로 다른 4개의 이미지를 crop하여 하나로 결합하여 새로운 이미지 데이터를 생성하여 훈련데이터로 사용합니다. 일상적인 맥락 밖의 물체 감지를 향상시킵니다. (cutmix는 이미지 2개 사용)
-    
+2. Annotations
+- Score: whether to ignore로 1또는 0의 값을 가집니다. Score가 0인 객체의 category id는 모두 0으로 ignored regions 이므로 모두 제외되어 학습에 사용됩니다.
+- 아래 이미지에서 볼 수 있듯이 드론이 보는 시야에서 일정거리 밖의 구역을 무시하고 시야의 가운데 있는 객체들을 처리하는 것으로 유추할 수 있습니다.
+- 하지만 영역이 계속 늘어났다 줄어났다 하고, ignored region과 함께 감지할 객체들이 함께 나타나는 frame이 존재하여 기준이 모호합니다(모두 제외하므로 문제 없음).
+  ![image](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/ignored_regions.gif)
+- Truncation: 사물이 잘린 정도로 화면 밖에 물체가 걸쳐 있다면 1, 온전히 화면 안에 나온다면 0의 값을 가집니다.
+- 빨간색 bbox가 truncation을 나타냅니다.
+- 이 Truncation을 제외한다면 ignored regions가 아닌 집중하고자 하는 곳에 집중하고, 화면 밖으로 나가는 물체의 Tracklet을 조기 종료시킴으로써 Detection 및 Tracking 성능 향상에 도움이 될 것으로 예상하였습니다.
+  ![image](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/Truncation1.png)
+  ![image](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/Truncation2.png)
 
+- Occlusion: 가려짐 정도로 겹치지 않았을 때는 0, 물체가 겹치게 되어 가려졌을 때 살짝 가린 정도는 1, 아예 안보이는 경우는 2를 나타냅니다.
+- 파란색 bbox가 occlusion1, 빨간색 bbox가 occlusion2를 나타냅니다.
+- Occlusion 해결이 MOT의 목적이기 때문에 occlusion 유무의 차이는 실험하지 않았고 이에 대해 추후에 필요하다면 연구해볼 계획입니다.
 
-6. **예상 결과와 비교 및 분석 진행** 
-( 정성적 평가 자료 첨부 )
+  ![image](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/Occlusion1.png)
 
+이를 통하여 Augmentation에서 기본, Mixup, Mosaic, Mixup + Mosaic 4가지 실험, 그리고 Annotation에서 Trucation 유무를 가지고 모델당 총 8번의 실험을 진행하기로 하였습니다.
 
+- 실험 Settings
 
-## Structure
+| 구분                      | 기본 Settings                                 |
+| ----------------------- | ------------------------------------------- |
+| Class                   | 5 Classes(Pedestrian, Car, Van, Truck, Bus) |
+| Image Scale             | YOLOX: (1920, 1080), RetinaNet: (1080, 1080)|
+| Epoch                   | 2                                           |
+| Batch Size              | 주어진 리소스에 맞게,  YOLOX: 1, 4, RetinaNet: 16, 32|
+| Optimizer               | SGD, momentum=0.9, weight decay=0.0001     |
+| Learning Rate           | 0.02                                        |
+| Schedule                | Linear step                                 |
+| Gradient Clipping       | RetinaNet, max norm=35  ,norm type=2        |
+| Augmentation            | Resize, RandomFlip, Pad                     |
+| Metric                  | HOTA(DetA, AssA)                            |
+| Checkpoint              | COCO pretrained                             |
 
+**결과 분석**  
+리소스 부족으로 전부를 실험하지는 못했습니다.
+- 전체 결과 표
 
-- 데이터 구조
+|                                 | None | Mixup | Mosaic | Truncation | HOTA   | DetA   | AssA   |
+| ------------------------------- | ---- | ----- | ------ | ---------- | ------ | ------ | ------ |
+| RetinaNet_No_Aug                | O    | X     | X      | O          | 0.3491 | 0.2521 | 0.488  |
+| RetinaNet_MixUp                 | O    | O     | X      | O          | 0.3494 | 0.256  | 0.4823 |
+| RetinaNet_Mosaic                | O    | X     | O      | O          | 0.3094 | 0.2388 | 0.413  |
+| RetinaNet_MixUp+Mosaic          | O    | O     | O      | O          | 0.333  | 0.2521 | 0.4479 |
+| RetinaNet_No_trunc_No_Aug       | O    | X     | X      | X          | 0.3311 | 0.2331 | 0.4756 |
+| RetinaNet_No_trunc_MixUp        | O    | O     | X      | X          | \-     | \-     | \-     |
+| RetinaNet_No_trunc_Mosaic       | O    | X     | O      | X          | \-     | \-     | \-     |
+| RetinaNet_No_trunc_MixUp+Mosaic | O    | O     | O      | X          | 0.3219 | 0.2367 | 0.4455 |
+| YOLOX_No_Aug                    | O    | X     | X      | O          | \-     | \-     | \-     |
+| YOLOX_MixUp                     | O    | O     | X      | O          | 0.2012 | 0.1385 | 0.3774 |
+| YOLOX_Mosaic                    | O    | X     | O      | O          | 0.205  | 0.1431 | 0.4186 |
+| YOLOX_MixUp+Mosaic              | O    | O     | O      | O          | 0.2112 | 0.1411 | 0.45   |
+| YOLOX_No_trunc_No_Aug           | O    | X     | X      | X          | 0.1453 | 0.1119 | 0.1928 |
+| YOLOX_No_trunc_MixUp            | O    | O     | X      | X          | 0.2032 | 0.1427 | 0.4435 |
+| YOLOX_No_trunc_Mosaic           | O    | X     | O      | X          | 0.1862 | 0.13   | 0.342  |
+| YOLOX_No_trunc_MixUp+Mosaic     | O    | O     | O      | X          | 0.1473 | 0.1246 | 0.2868 |
 
- 
- -----------------------------------------------------------------------------------------------------------------------------------
-       Name	                                      Description
- -----------------------------------------------------------------------------------------------------------------------------------
-    <frame_index>	  The frame index of the video frame
-   
-    <target_id>	          In the DETECTION result file, the identity of the target should be set to the constant -1.
-		          In the GROUNDTRUTH file, the identity of the target is used to provide the temporal corresponding 
-		          relation of the bounding boxes in different frames.
-			  
-    <bbox_left>	          The x coordinate of the top-left corner of the predicted bounding box
-
-    <bbox_top>	          The y coordinate of the top-left corner of the predicted object bounding box
-
-    <bbox_width>	  The width in pixels of the predicted object bounding box
-
-    <bbox_height>	  The height in pixels of the predicted object bounding box
-
-      <score>	          The score in the DETECTION file indicates the confidence of the predicted bounding box enclosing 
-                          an object instance.
-                          The score in GROUNDTRUTH file is set to 1 or 0. 1 indicates the bounding box is considered in evaluation, 
-		          while 0 indicates the bounding box will be ignored.
-			  
-    <object_category>	  The object category indicates the type of annotated object
-
-		      
-    <truncation>	  The score in the DETECTION file should be set to the constant -1.
-                          The score in the GROUNDTRUTH file indicates the degree of object parts appears outside a frame 
-		          (i.e., no truncation = 0 (truncation ratio 0%), and partial truncation = 1 (truncation ratio 1% ~ 50%)).
-		      
-     <occlusion>	  The score in the DETECTION file should be set to the constant -1.
-                          The score in the GROUNDTRUTH file indicates the fraction of objects being occluded 
-		          (i.e., no occlusion = 0 (occlusion ratio 0%), partial occlusion = 1 (occlusion ratio 1% ~ 50%), 
-		          and heavy occlusion = 2 (occlusion ratio 50% ~ 100%)).
-
+- DetA vs AssA plot
+- 실선은 HOTA값이고 파란 글씨는 HOTA기준 등수를 의미합니다.
+  ![image](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/HOTA.png)
+- 2epoch만 돌렸을 경우 RetinaNet의 성능이 YOLOX보다 좋았다.
+- YOLOX의 경우 augmention이 중요했고, mixup이 AssA에 가장 효과적이었다.
+- RetinaNet의 경우에도 mixup의 성능이 중요했고, 오히려 강한 augmentation은 성능을 떨어뜨렸다.
+- Truncation 유무는 예상과 달리 truncation을 제외했을 때 오히려 성능이 하락했다.
 
 
 ## Source Code

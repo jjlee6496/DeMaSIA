@@ -65,13 +65,47 @@ Drone영상(항공영상) 기반 다중 객체 추적을 목표로합니다.
 
 ## Process
 
-( 정진님 그림 첨부 )
+### 1. Data
 
-1.  **기존 VisDrone → COCO Format 후 데이터 분석 진행**
+
+**MOT17 데이터셋** 
+
+MOT19 데이터셋은 MOTChallenge를 위해 개발된 데이터셋으로, MOT를 위한 평가와 벤치마크를 위해 사용되는 데이터셋입니다. MOT19 데이터셋의 annotation 정보는 COCO format으로 되어있는데 이는 bounding box의 좌상단 좌표와 너비와 높이와 더불어, occlusion 여부, truncation 여부 등을 포함하고 있습니다.
+
+**COCO Format**
+MOT COCO format은 COCO 형식의 기본 구조를 따르면서도 객체 추적 관련 정보를 추가로 포함하여 다중 객체 추적 문제를 다루는 데 특화된 형식입니다. 이를 통해 알고리즘은 객체의 식별, 이동 및 속성 변화를 정확하게 추적할 수 있는 능력을 평가하고 비교할 수 있습니다. 
+
+카테고리 id를 포함해서 bounding box의 위치 및 넓이 등을 포함하고 있습니다. 
+
+COCO foramt의 예시는 다음과 같습니다.
+
+```python
+{"category_id": 1,
+ "bbox": [374.0, 305.0, 33.0, 89.0], "area": 2937.0, 
+"iscrowd": false, 
+"visibility": 0.25, 
+"mot_instance_id": 0, "mot_conf": 1.0, "mot_class_id": 1, 
+"id": 75814, "image_id": 3515, "instance_id": 0}
+
+```
+
+**Visdrone 데이터**
+
+Visdrone  데이터는 vision 기반 UAV(Unmanned Aerial Vehicle)로 촬영한 비디오 데이터셋으로, 객체 감지와 추적을 위해 만들어진 대규모 데이터셋입니다.  도시, 시골, 공원 등 다양한 장소와 날씨 및 밝기 조건과 더불어 많은 객체가 밀집되어있거나 물체에 가려진 다양한 상황에서 수집되었습니다. 객체는 자동차, 보행자, 자전거와 같은 11개의 다양한 클래스로 분류되고, 260만개 이상의 ground-truth bounding box와 annotation 정보를 포함하고 있습니다. annotatino 정보에는 객체 클래스와 bounding box 위치와 크기 정보 이외에도 occlusion 정도, truncation 유뮤와 같은 중요한 속성도 제공됩니다.
+
+**EDA**
+
+* Train/Test Dataset 분석
+
+**Train**
+
+* 비디오 개수 : 56
+* 이미지 개수 : 249
+
     
-    ( 최종 형태의 데이터 구조? 필요 ann, label 그리고 json 변환 파일 )
-    
-2. **MOT 방식 선정 → Detector, Tracker 선정**
+### 2. 모델 선정  
+
+**MOT 방식 선정 → Detector, Tracker 선정**
 ( 선정한 모델 구조 정도 첨부 원리 or MOT에서 유리한 장점 )
 
 **Detector**

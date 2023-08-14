@@ -102,6 +102,15 @@ Visdrone  데이터는 vision 기반 UAV(Unmanned Aerial Vehicle)로 촬영한 �
 * 비디오 개수 : 56
 * 이미지 개수 : 249
 
+  ![image](https://github.com/jjlee6496/DeMaSIA/assets/126838460/583fde5f-a2dc-40b1-b25a-090751a9365e)
+
+**Test**
+
+* 비디오 개수 : 17
+* 이미지 개수 : 6635
+
+  
+
     
 ### 2. 모델 선정  
 

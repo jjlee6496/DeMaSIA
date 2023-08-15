@@ -219,10 +219,10 @@ MixUp의 아이디어는 두 개의 다른 이미지를 섞어서 새로운 이�
 서로 다른 4개의 이미지를 crop하여 하나로 결합하여 새로운 이미지 데이터를 생성하여 훈련데이터로 사용합니다. 일상적인 맥락 밖의 물체 감지를 향상시킵니다.
 
 2. Annotations
-- Score: whether to ignore로 1또는 0의 값을 가집니다. Score가 0인 객체의 category id는 모두 0으로 ignored regions 이므로 모두 제외되어 학습에 사용됩니다.
-- 아래 이미지에서 볼 수 있듯이 드론이 보는 시야에서 일정거리 밖의 구역을 무시하고 시야의 가운데 있는 객체들을 처리하는 것으로 유추할 수 있습니다.
-- 하지만 영역이 계속 늘어났다 줄어났다 하고, ignored region과 함께 감지할 객체들이 함께 나타나는 frame이 존재하여 기준이 모호합니다(모두 제외하므로 문제 없음).
-  ![image](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/ignored_regions.gif)
+- Score: whether to ignore로 1또는 0의 값을 가집니다. Score가 0인 객체의 category id는 모두 0으로 ignored regions 이므로 모두 제외되어 학습에 사용됩니다.  
+- 아래 이미지에서 볼 수 있듯이 드론이 보는 시야에서 일정거리 밖의 구역을 무시하고 시야의 가운데 있는 객체들을 처리하는 것으로 유추할 수 있습니다.  
+- 하지만 영역이 계속 늘어났다 줄어났다 하고, ignored region과 함께 감지할 객체들이 함께 나타나는 frame이 존재하여 기준이 모호합니다(모두 제외하므로 문제 없음).  
+  ![image](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/ignored_regions.gif)  
 - Truncation: 사물이 잘린 정도로 화면 밖에 물체가 걸쳐 있다면 1, 온전히 화면 안에 나온다면 0의 값을 가집니다.
 - 빨간색 bbox가 truncation을 나타냅니다.
 - 이 Truncation을 제외한다면 ignored regions가 아닌 집중하고자 하는 곳에 집중하고, 화면 밖으로 나가는 물체의 Tracklet을 조기 종료시킴으로써 Detection 및 Tracking 성능 향상에 도움이 될 것으로 예상하였습니다.

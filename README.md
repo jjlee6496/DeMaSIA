@@ -249,7 +249,7 @@ MixUp의 아이디어는 두 개의 다른 이미지를 섞어서 새로운 이�
 | Learning Rate           | 0.02                                        |
 | Schedule                | Linear step                                 |
 | Gradient Clipping       | RetinaNet, max norm=35  ,norm type=2        |
-| Augmentation            | Resize, RandomFlip, Pad                     |
+| Augmentation            | Resize, RandomFlip, Pad -> 기본                |
 | Metric                  | HOTA(DetA, AssA)                            |
 | Checkpoint              | COCO pretrained                             |
 
@@ -257,7 +257,7 @@ MixUp의 아이디어는 두 개의 다른 이미지를 섞어서 새로운 이�
 리소스 부족으로 전부를 실험하지는 못했습니다.
 - 전체 결과 표
 
-|                                 | None | Mixup | Mosaic | Truncation | HOTA   | DetA   | AssA   |
+|                                 | 기본 | Mixup | Mosaic | Truncation | HOTA   | DetA   | AssA   |
 | ------------------------------- | ---- | ----- | ------ | ---------- | ------ | ------ | ------ |
 | RetinaNet_No_Aug                | O    | X     | X      | O          | 0.3491 | 0.2521 | 0.488  |
 | RetinaNet_MixUp                 | O    | O     | X      | O          | 0.3494 | 0.256  | 0.4823 |

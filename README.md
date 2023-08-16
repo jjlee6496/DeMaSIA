@@ -312,9 +312,11 @@ MixUp의 아이디어는 두 개의 다른 이미지를 섞어서 새로운 이�
 
 
 - Data
+  
   COCO pretrained가 아닌 DOTA와 같이 Drone 이미지와 비슷한 항공사진 데이터셋에서 훈련된 가중치를 불러와 학습을 진행해보고 싶습니다. 
   
 - EDA
+  
   Truncation이 생겼다가 사라지는 경우를 확인하였습니다. Truncation 에 대한 실험을 할 때 각 프레임마다 Truncation이 1인 Object만 제외시키는 것이 아니라 Truncation이 한번이라도 일어났던 객체를 데이터셋에서 모두 제거하여 실험을 진행하고 싶습니다.
   
 - Model

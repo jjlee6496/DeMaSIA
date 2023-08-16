@@ -288,11 +288,11 @@ MixUp의 아이디어는 두 개의 다른 이미지를 섞어서 새로운 이�
 ## Source Code
 
 
-- [deta coco 변환 코드]
+- [deta coco 변환 코드](https://github.com/jjlee6496/DeMaSIA/blob/main/tools/vis2coco.py)
 - [데이터 eda 코드]
-- [Yolox]
+- [Yolox](https://github.com/jjlee6496/DeMaSIA/tree/main/YOLOX)
 - [Retina]
-- [bytetrack]
+
 - [시각 자료 생성 코드]
 - [gif]
 
@@ -300,15 +300,33 @@ MixUp의 아이디어는 두 개의 다른 이미지를 섞어서 새로운 이�
 
 ## 회고
 
+|팀원                       | 느낀점                                                                |
+|---------------------------------------------------------|---------------------------------------------------------------------------------------------------- |
+|이정진|짧은 기간 내에 주어진 리소스 내에서 리서치적으로 어떤 것을 가져 갈 수 있는지 고민하면서 많이 성장 할 수 있었던 시간이었습니다. 팀장으로써 어떻게 팀을 이끌어야 할지 고민하고 팀원이라면 어떻게 받아들일지도 생각해보면서 팀적으로 서포팅 하는 방법도 배운 알찬 시간 이었습니다.|
+|정혜원|MOT에 대해 좀 더 관심을 가지게 되었고, Detection과 Tracking에 대해 좀 더 심화있게 공부할 수 있었던 기회였습니다. 한달이 조금 넘는 시간동안 스스로 뿐만 아니라 팀원 분들에게 많이 배워서 감사했습니다. 이 프로젝트가 끝난 뒤 다른 모델들에 대한 추가 프로젝트를 진행할 예정입니다.|
+|주상현|한 달이라는 짧은 기간동안 많은 걸 배울 수 있고 새로운 것에 도전할 수 있는 유익한 시간이었습니다. 한편으로 해보고 싶은 실험을 다 해보지 못해 아쉬움이 많이 남는 시간이었지만 이후 찾아낸 문제점들과 해보고 싶은 실험들을 해보며 개선해 나갈 것입니다|
+
 
 
 ### Development
 
 
 - Data
+  COCO pretrained가 아닌 DOTA와 같이 Drone 이미지와 비슷한 항공사진 데이터셋에서 훈련된 가중치를 불러와 학습을 진행해보고 싶습니다. 
+  
 - EDA
+  Truncation이 생겼다가 사라지는 경우를 확인하였습니다. Truncation 에 대한 실험을 할 때 각 프레임마다 Truncation이 1인 Object만 제외시키는 것이 아니라 Truncation이 한번이라도 일어났던 객체를 데이터셋에서 모두 제거하여 실험을 진행하고 싶습니다.
+  
 - Model
+  1. Tracker : 위 실험에서는 motion-based tracker인 bytetrack을 사용하였는데, 이 이외에도 re-id based tracker나 transformer based tracker에 대해서도 성능을 확인하고 싶습니다. 특히 SDE 모델이며 현재 MOT17데이터셋에서 SOTA를 달성하고 있는 SmileTrack에 대한 추가 실험을 진행하고싶습니다. 
+  2. Detector : 1-stage detector이외에도 더 높은 정확도를 보일 수 있는 2-stage detector에 대해서도 실험을 진행하고 싶습니다.
+
+ 
 - exp
+  1. 실험에서 사용했던 detector모델의 backbone을 다르게 하여 (ex. Res101...) 실험을 진행해보고 싶습니다.
+  2. IOU threshold를 변경시키며 parametric search를 진행하여 IOU threshold값이 matching에 어떤 영향을 미치는지 확인하고 싶습니다.
+  3. Visdrone 데이터셋은 car와 pedestrian 비율 이외에도 train과 test dataset의 Class Unbalance 문제가 발생하였습니다. 이러한 Unbalanced Classes에 대해 추가 sampling 같은 Augmentation 기법을 적용하여 실험하고 싶습니다. 그리고 이 실험 결과를 Class별과 비디오 Sequence별로 metric을 얻어낸 후 분석하고 싶습니다. 
+  
 
 
 

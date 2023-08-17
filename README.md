@@ -289,12 +289,10 @@ MixUp의 아이디어는 두 개의 다른 이미지를 섞어서 새로운 이�
 
 
 - [deta coco 변환 코드](https://github.com/jjlee6496/DeMaSIA/blob/main/tools/vis2coco.py)
-- [데이터 eda 코드]
+- [데이터 eda 코드](https://github.com/jjlee6496/DeMaSIA/blob/main/EDA.ipynb)
 - [Yolox](https://github.com/jjlee6496/DeMaSIA/tree/main/YOLOX)
-- [Retina]
-
-- [시각 자료 생성 코드]
-- [gif]
+- [Retina](https://github.com/jjlee6496/DeMaSIA/tree/main/RetinaNet)
+- [시각 자료 생성 코드](https://github.com/jjlee6496/DeMaSIA/tree/main/tools/visualization)
 
 
 

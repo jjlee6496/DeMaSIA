@@ -32,6 +32,36 @@ SIA는 인공지능 기술을 통해 지구 관측의 자동화 및 분석의 �
 
 - 23.07.27 ~ 23.08.11
 
+## 결과 요약  
+리소스 부족으로 전부를 실험하지는 못했습니다.
+- 전체 결과 표
+
+|                                 | 기본 | Mixup | Mosaic | Truncation | HOTA   | DetA   | AssA   |
+| ------------------------------- | ---- | ----- | ------ | ---------- | ------ | ------ | ------ |
+| RetinaNet_No_Aug                | O    | X     | X      | O          | 0.3491 | 0.2521 | 0.488  |
+| RetinaNet_MixUp                 | O    | O     | X      | O          | 0.3494 | 0.256  | 0.4823 |
+| RetinaNet_Mosaic                | O    | X     | O      | O          | 0.3094 | 0.2388 | 0.413  |
+| RetinaNet_MixUp+Mosaic          | O    | O     | O      | O          | 0.333  | 0.2521 | 0.4479 |
+| RetinaNet_No_trunc_No_Aug       | O    | X     | X      | X          | 0.3311 | 0.2331 | 0.4756 |
+| RetinaNet_No_trunc_MixUp        | O    | O     | X      | X          | \-     | \-     | \-     |
+| RetinaNet_No_trunc_Mosaic       | O    | X     | O      | X          | \-     | \-     | \-     |
+| RetinaNet_No_trunc_MixUp+Mosaic | O    | O     | O      | X          | 0.3219 | 0.2367 | 0.4455 |
+| YOLOX_No_Aug                    | O    | X     | X      | O          | \-     | \-     | \-     |
+| YOLOX_MixUp                     | O    | O     | X      | O          | 0.2012 | 0.1385 | 0.3774 |
+| YOLOX_Mosaic                    | O    | X     | O      | O          | 0.205  | 0.1431 | 0.4186 |
+| YOLOX_MixUp+Mosaic              | O    | O     | O      | O          | 0.2112 | 0.1411 | 0.45   |
+| YOLOX_No_trunc_No_Aug           | O    | X     | X      | X          | 0.1453 | 0.1119 | 0.1928 |
+| YOLOX_No_trunc_MixUp            | O    | O     | X      | X          | 0.2032 | 0.1427 | 0.4435 |
+| YOLOX_No_trunc_Mosaic           | O    | X     | O      | X          | 0.1862 | 0.13   | 0.342  |
+| YOLOX_No_trunc_MixUp+Mosaic     | O    | O     | O      | X          | 0.1473 | 0.1246 | 0.2868 |
+
+- DetA vs AssA plot
+- 실선은 HOTA값이고 파란 글씨는 HOTA기준 등수를 의미합니다.
+  ![image](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/HOTA.png)
+- 2epoch만 돌렸을 경우 RetinaNet의 성능이 YOLOX보다 좋았다.
+- YOLOX의 경우 augmention이 중요했고, mixup이 AssA에 가장 효과적이었다.
+- RetinaNet의 경우에도 mixup의 성능이 중요했고, 오히려 강한 augmentation은 성능을 떨어뜨렸다.
+- Truncation 유무는 예상과 달리 truncation을 제외했을 때 오히려 성능이 하락했다.
 
 ## Tools
 
@@ -253,36 +283,6 @@ MixUp의 아이디어는 두 개의 다른 이미지를 섞어서 새로운 이�
 | Metric                  | HOTA(DetA, AssA)                            |
 | Checkpoint              | COCO pretrained                             |
 
-**결과 분석**  
-리소스 부족으로 전부를 실험하지는 못했습니다.
-- 전체 결과 표
-
-|                                 | 기본 | Mixup | Mosaic | Truncation | HOTA   | DetA   | AssA   |
-| ------------------------------- | ---- | ----- | ------ | ---------- | ------ | ------ | ------ |
-| RetinaNet_No_Aug                | O    | X     | X      | O          | 0.3491 | 0.2521 | 0.488  |
-| RetinaNet_MixUp                 | O    | O     | X      | O          | 0.3494 | 0.256  | 0.4823 |
-| RetinaNet_Mosaic                | O    | X     | O      | O          | 0.3094 | 0.2388 | 0.413  |
-| RetinaNet_MixUp+Mosaic          | O    | O     | O      | O          | 0.333  | 0.2521 | 0.4479 |
-| RetinaNet_No_trunc_No_Aug       | O    | X     | X      | X          | 0.3311 | 0.2331 | 0.4756 |
-| RetinaNet_No_trunc_MixUp        | O    | O     | X      | X          | \-     | \-     | \-     |
-| RetinaNet_No_trunc_Mosaic       | O    | X     | O      | X          | \-     | \-     | \-     |
-| RetinaNet_No_trunc_MixUp+Mosaic | O    | O     | O      | X          | 0.3219 | 0.2367 | 0.4455 |
-| YOLOX_No_Aug                    | O    | X     | X      | O          | \-     | \-     | \-     |
-| YOLOX_MixUp                     | O    | O     | X      | O          | 0.2012 | 0.1385 | 0.3774 |
-| YOLOX_Mosaic                    | O    | X     | O      | O          | 0.205  | 0.1431 | 0.4186 |
-| YOLOX_MixUp+Mosaic              | O    | O     | O      | O          | 0.2112 | 0.1411 | 0.45   |
-| YOLOX_No_trunc_No_Aug           | O    | X     | X      | X          | 0.1453 | 0.1119 | 0.1928 |
-| YOLOX_No_trunc_MixUp            | O    | O     | X      | X          | 0.2032 | 0.1427 | 0.4435 |
-| YOLOX_No_trunc_Mosaic           | O    | X     | O      | X          | 0.1862 | 0.13   | 0.342  |
-| YOLOX_No_trunc_MixUp+Mosaic     | O    | O     | O      | X          | 0.1473 | 0.1246 | 0.2868 |
-
-- DetA vs AssA plot
-- 실선은 HOTA값이고 파란 글씨는 HOTA기준 등수를 의미합니다.
-  ![image](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/HOTA.png)
-- 2epoch만 돌렸을 경우 RetinaNet의 성능이 YOLOX보다 좋았다.
-- YOLOX의 경우 augmention이 중요했고, mixup이 AssA에 가장 효과적이었다.
-- RetinaNet의 경우에도 mixup의 성능이 중요했고, 오히려 강한 augmentation은 성능을 떨어뜨렸다.
-- Truncation 유무는 예상과 달리 truncation을 제외했을 때 오히려 성능이 하락했다.
 
 
 ## Source Code

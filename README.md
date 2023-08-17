@@ -28,9 +28,8 @@ SIA는 인공지능 기술을 통해 지구 관측의 자동화 및 분석의 �
 
 
 ## 프로젝트 기간
-
-
 - 23.07.27 ~ 23.08.11
+[!img](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/%EC%9D%BC%EC%A0%95.png)
 
 ## 결과 요약  
 리소스 부족으로 전부를 실험하지는 못했습니다.

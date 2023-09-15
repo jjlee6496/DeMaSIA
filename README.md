@@ -284,9 +284,9 @@ MixUp의 아이디어는 두 개의 다른 이미지를 섞어서 새로운 이�
 
 ## 실험 결과
 ![image](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/Result1.gif)
-* 자동차(크기가 큰 물체)에 대해서는 어느정도 Tracking이 잘 되지만 보행자(크기가 작은 물체)에 대해서는 Tracking이 잘 되지 않는 것을 볼 수 있다.
+* 자동차(크기가 큰 물체)에 대해서는 어느정도 Tracking이 잘 되지만 보행자(크기가 작은 물체)에 대해서는 Tracking이 잘 되지 않는 것을 볼 수 있다.  
 ![image](https://github.com/jjlee6496/DeMaSIA/blob/main/imgs/Result2.gif)
-* 여러명의 보행자에 대해서 Occlusion이 일어났을 경우에 아직 잘 대처하지 못하는 것으로 보인다.
+* 여러명의 보행자에 대해서 Occlusion이 일어났을 경우에 아직 잘 대처하지 못하는 것으로 보인다.  
 
 ## Source Code
 
